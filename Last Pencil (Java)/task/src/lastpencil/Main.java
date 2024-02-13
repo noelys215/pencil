@@ -26,7 +26,8 @@ public class Main {
         // Step 3: Print the pencils and who is going first
         for (int i = 0; i < numberOfPencils; i++) System.out.print("|");
 
-        System.out.println(); // Move to the next line after printing pencils
+        // Move to the next line after printing pencils
+        System.out.println();
 
         System.out.println(firstPlayer + " is going first!");
 
