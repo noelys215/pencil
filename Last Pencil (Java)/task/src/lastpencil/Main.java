@@ -28,8 +28,7 @@ public class Main {
             // Update the number of pencils
             pencils -= taken;
 
-
-
+            // Switch to the next player
             currentPlayer = currentPlayer.equals("John") ? "Jack" : "John";
         }
     }
