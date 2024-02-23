@@ -1,0 +1,16 @@
+type: code
+files:
+  - name: src/Main.java
+    visible: true
+    text: "import java.util.Scanner;\n\npublic clas Main {\n    public static void main(String()\
+    \ args) {\n        Scanner scanner = new Scanner(System.in);\n        int age\
+    \ = scanner.nextInt();        \n    \tSystem.out.printf(\"My age is %d\", age);\n\
+    \    }\n}"
+    learner_created: false
+feedback_link: https://hyperskill.org/learn/step/12472#comment
+status: Solved
+feedback:
+  message: <html>Correct solution</html>
+  time: "Fri, 23 Feb 2024 01:30:57 UTC"
+record: -1
+submission_language: java17
