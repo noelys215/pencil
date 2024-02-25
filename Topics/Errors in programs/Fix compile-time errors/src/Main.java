@@ -7,7 +7,8 @@ public class Main {
         String line1 = scanner.nextLine();
         String line2 = scanner.nextLine();
 
-        System.out.println(line2);
+//        System.out.println(line2);
+
         System.out.println(line1);
     }
 }
