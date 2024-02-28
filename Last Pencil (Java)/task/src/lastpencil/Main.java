@@ -19,7 +19,7 @@ public class Main {
         // Initialize the game with the first inputs from the player
         takeFirstInput();
         // Print the initial state of pencils
-        printPencils();
+//        printPencils();
 
         // Main game loop, runs until pencils are finished
         while (Main.numPencils > 0) {
