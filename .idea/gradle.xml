@@ -30,6 +30,11 @@
             <option value="$PROJECT_DIR$/Topics/Processing strings/Generating passwords" />
             <option value="$PROJECT_DIR$/Topics/Processing strings/Move the first N characters" />
             <option value="$PROJECT_DIR$/Topics/Processing strings/Theory" />
+            <option value="$PROJECT_DIR$/Topics/Random class/Choose a correct invocation" />
+            <option value="$PROJECT_DIR$/Topics/Random class/Decoding Java's Random Class" />
+            <option value="$PROJECT_DIR$/Topics/Random class/Gaussian random numbers" />
+            <option value="$PROJECT_DIR$/Topics/Random class/The result of a method" />
+            <option value="$PROJECT_DIR$/Topics/Random class/Theory" />
             <option value="$PROJECT_DIR$/util" />
           </set>
         </option>
