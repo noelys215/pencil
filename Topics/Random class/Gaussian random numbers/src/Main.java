@@ -29,16 +29,11 @@ public class Main {
                     break;
                 }
             }
-
             // If the condition is satisfied, break the loop
-            if (allLessOrEqual) {
-                break;
-            }
-
+            if (allLessOrEqual) break;
             // Go to the next seed
             seed++;
         }
-
         // Print the seed that satisfies the condition
         System.out.println(seed);
     }
