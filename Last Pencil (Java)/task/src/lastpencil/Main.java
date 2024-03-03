@@ -8,9 +8,20 @@ public class Main {
     static final Random random = new Random();
 
     public static void main(String[] args) {
-        System.out.println("How many pencils would you like to use:");
-        int pencils = scanner.nextInt();
-        scanner.nextLine();  // Consume the rest of the line
+        int pencils = 0;
+        // Ask for the initial number of pencils, ensuring it is a positive number
+        while (pencils <= 0) {
+            System.out.println("How many pencils would you like to use:");
+            String input = scanner.nextLine();
+            try {
+                pencils = Integer.parseInt(input);
+                if (pencils <= 0) {
+                    System.out.println("The number of pencils should be positive");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("The number of pencils should be numeric");
+            }
+        }
 
         System.out.println("Who will be the first (John, Jack):");
         String currentPlayer = scanner.nextLine();
@@ -26,8 +37,12 @@ public class Main {
                 System.out.println(pencilsTaken);
             } else {
                 System.out.println(currentPlayer + "'s turn:");
+                while (!scanner.hasNextInt()) {
+                    System.out.println("Possible values: '1', '2' or '3'");
+                    scanner.next(); // consume the non-integer input
+                }
                 pencilsTaken = scanner.nextInt();
-                scanner.nextLine();  // Consume the rest of the line
+                scanner.nextLine(); // consume the newline after the number
             }
 
             pencils -= pencilsTaken;
@@ -39,14 +54,12 @@ public class Main {
     }
 
     private static int botMove(int pencils) {
-        // Bot is in a losing position if pencils modulo 4 equals 1.
         if (pencils % 4 == 1) {
-            // Bot takes a random number between 1 and 3
+            // Bot is in a losing position, takes a random number between 1 and 3
             return random.nextInt(3) + 1;
         } else {
             // Winning strategy: leave a number of pencils that is one more than a multiple of 4
-            // Bot takes enough pencils to make the total number of pencils left modulo 4 equals 1
-            return (pencils - 1) % 4 == 0 ? 3 : (pencils - 1) % 4;
+            return (pencils - 1) % 4;
         }
     }
 }
