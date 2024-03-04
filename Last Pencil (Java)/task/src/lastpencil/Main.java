@@ -37,17 +37,18 @@ public class Main {
         int pencils;
         do {
             System.out.println("How many pencils would you like to use:");
-            while (!scanner.hasNextInt()) {
+            String input = scanner.nextLine().trim();
+            try {
+                pencils = Integer.parseInt(input);
+                if (pencils <= 0) {
+                    System.out.println("The number of pencils should be positive");
+                } else {
+                    return pencils;
+                }
+            } catch (NumberFormatException e) {
                 System.out.println("The number of pencils should be numeric");
-                scanner.next(); // discard non-numeric input
             }
-            pencils = scanner.nextInt();
-            scanner.nextLine(); // consume newline
-            if (pencils <= 0) {
-                System.out.println("The number of pencils should be positive");
-            }
-        } while (pencils <= 0);
-        return pencils;
+        } while (true);
     }
 
     private static String getFirstPlayerName() {
@@ -57,37 +58,40 @@ public class Main {
             name = scanner.nextLine().trim();
             if (!"John".equalsIgnoreCase(name) && !"Jack".equalsIgnoreCase(name)) {
                 System.out.println("Choose between 'John' and 'Jack'");
+            } else {
+                return name;
             }
-        } while (!"John".equalsIgnoreCase(name) && !"Jack".equalsIgnoreCase(name));
-        return name;
+        } while (true);
     }
 
     private static int getPlayerMove(int pencilsLeft) {
         int move;
         do {
-            while (!scanner.hasNextInt()) {
+            String input = scanner.nextLine().trim();
+            try {
+                move = Integer.parseInt(input);
+                if (move >= 1 && move <= 3 && move <= pencilsLeft) {
+                    return move;
+                } else {
+                    System.out.println("Possible values: '1', '2' or '3'");
+                }
+            } catch (NumberFormatException e) {
                 System.out.println("Possible values: '1', '2' or '3'");
-                scanner.next(); // discard invalid input
             }
-            move = scanner.nextInt();
-            scanner.nextLine(); // consume newline
-            if (move < 1 || move > 3) {
-                System.out.println("Possible values: '1', '2' or '3'");
-            } else if (move > pencilsLeft) {
-                System.out.println("Too many pencils were taken");
-                move = 0; // reset move to invalid so the loop continues
-            }
-        } while (move < 1 || move > 3);
-        return move;
+        } while (true);
     }
 
     private static int botMove(int pencils) {
-        if (pencils % 4 == 1) {
-            // Bot takes a random number between 1 and 3
-            return random.nextInt(3) + 1;
-        } else {
-            // Winning strategy: leave a number of pencils that is one more than a multiple of 4
-            return (pencils - 1) % 4 == 0 ? 3 : (pencils - 1) % 4;
+        // If only one pencil is left, the bot must take it.
+        if (pencils == 1) {
+            return 1;
         }
+        // If the bot is in a winning position, it takes enough pencils to leave
+        // a multiple of 4 for the opponent, forcing a win.
+        if (pencils % 4 != 1) {
+            return (pencils - 1) % 4; // Take enough to leave a multiple of 4
+        }
+        // Otherwise, bot takes a random valid number of pencils.
+        return random.nextInt(3) + 1;
     }
 }
