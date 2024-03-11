@@ -4,96 +4,129 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class Main {
-    private static final Random random = new Random();
-
     public static void main(String[] args) {
+        String[] participants = new String[3];
         Scanner scanner = new Scanner(System.in);
-        int pencils = 0;
+        String howManyPencils;
+        String whoWillBe;
+        int user = -1;
+        int boot = 0;
+        String takenPencils;
+        participants[0] = "John";
+        participants[1] = "Jack";
 
-        // Input validation for the number of pencils
-        while (true) {
-            System.out.println("How many pencils would you like to use:");
-            String input = scanner.nextLine();
-            try {
-                pencils = Integer.parseInt(input);
-                if (pencils > 0) {
-                    break; // Valid number of pencils
-                } else {
-                    System.out.println("The number of pencils should be positive");
-                }
-            } catch (NumberFormatException e) {
-                System.out.println("The number of pencils should be numeric");
-            }
+        System.out.println("How many pencils would you like to use:");
+        do {
+            howManyPencils = scanner.nextLine();
+        } while (!howManyPencilsValidate(howManyPencils));
+
+        System.out.println("Who will be the first (" + participants[0] + ", " + participants[1] + "):");
+        do {
+            whoWillBe = scanner.nextLine();
+        } while (!participantValidate(whoWillBe, participants));
+
+        if (whoWillBe.equals(participants[0])) {
+            user = 0;
+            boot = 1;
+        }
+        if (whoWillBe.equals(participants[1])) {
+            user = 1;
+            boot = 1;
         }
 
-        // Input validation for the first player
-        String firstPlayer = "";
-        while (!firstPlayer.equalsIgnoreCase("John") && !firstPlayer.equalsIgnoreCase("Jack")) {
-            System.out.println("Who will be the first (John, Jack):");
-            firstPlayer = scanner.nextLine().trim();
-            if (!firstPlayer.equalsIgnoreCase("John") && !firstPlayer.equalsIgnoreCase("Jack")) {
-                System.out.println("Choose between 'John' and 'Jack'");
-            }
-        }
+        do {
+            for (int i = 0; i < Integer.parseInt(howManyPencils); i++) System.out.print("|");
+            System.out.println("\n" + participants[user] + "'s turn!");
+            if (user == boot) takenPencils = playBoot(howManyPencils);
+            else do {
+                takenPencils = scanner.nextLine();
+            } while (!takenPencilsValidate(takenPencils, howManyPencils));
 
-        // Determine if Jack is the bot and who goes first
-        boolean isJackTurn = firstPlayer.equalsIgnoreCase("Jack");
-        int move;
+            howManyPencils = String.valueOf(Integer.parseInt(howManyPencils) - Integer.parseInt(takenPencils));
+            if (user == 0) user = 1;
+            else user = 0;
+        } while (Integer.parseInt(howManyPencils) > 0);
 
-        // Game loop
-        while (pencils > 0) {
-            printPencils(pencils); // Call method to print pencils
-            if (isJackTurn) {
-                move = bestMove(pencils);
-                System.out.println("Jack's turn:");
-                System.out.println("> " + move);
-            } else {
-                System.out.println("John's turn:");
-                while (true) {
-                    String input = scanner.nextLine();
-                    try {
-                        move = Integer.parseInt(input);
-                        if (move < 1 || move > 3) {
-                            System.out.println("Possible values: '1', '2', '3'");
-                        } else if (move > pencils) {
-                            System.out.println("too many pencils");
-                        } else {
-                            break; // Valid move
-                        }
-                    } catch (NumberFormatException e) {
-                        System.out.println("Possible values: '1', '2', '3'");
-                    }
-                }
-            }
+        if (user == 0) System.out.println(participants[0] + " won!");
+        else System.out.println(participants[1] + " won!");
 
-            pencils -= move;
-            isJackTurn = !isJackTurn; // Switch turns
-        }
+    }
 
-        // Determine and announce the winner
-        if (isJackTurn) {
-            System.out.println("John won!");
+    public static boolean participantValidate(String string, String[] participants) {
+        if (string.equals(participants[0]) || string.equals(participants[1])) {
+            return true;
         } else {
-            System.out.println("Jack won!");
+            System.out.println("Choose between 'John' and 'Jack'");
+            return false;
+        }
+    }
+
+
+    private static boolean howManyPencilsValidate(String howManyPencils) {
+        if (isNumber(howManyPencils)) {
+            System.out.println("The number of pencils should be numeric");
+            return false;
         }
 
-        scanner.close();
-    }
-
-    // Method to print the correct number of pencils
-    private static void printPencils(int pencils) {
-        System.out.println("|".repeat(pencils));
-    }
-
-    // Method to determine the best move for Jack (the bot)
-    private static int bestMove(int pencils) {
-        // If only one pencil is left, Jack must take it
-        if (pencils == 1) {
-            return 1;
+        if (howManyPencils.equals("0")) {
+            System.out.println("The number of pencils should be positive");
+            return false;
         }
-        // Otherwise, follow the winning strategy
-        int move = (pencils - 1) % 4;
-        return move == 0 ? 1 : move; // Prevent returning 0
+
+        if (Integer.parseInt(howManyPencils) < 0) {
+            System.out.println("The number of pencils should be numeric");
+            return false;
+        }
+
+        return true;
     }
+
+    private static boolean takenPencilsValidate(String takenPencils, String howManyPencils) {
+        if (
+                isNumber(takenPencils) ||
+                        Integer.parseInt(takenPencils) > 3 ||
+                        Integer.parseInt(takenPencils) < 0 ||
+                        takenPencils.equals("0")) {
+            System.out.println("Possible values: '1', '2' or '3'");
+            return false;
+        }
+
+        if (Integer.parseInt(takenPencils) > Integer.parseInt(howManyPencils)) {
+            System.out.println("Too many pencils were taken");
+            return false;
+        }
+
+        return true;
+    }
+
+    private static boolean isNumber(String str) {
+        try {
+            Integer.parseInt(str);
+            return false;
+        } catch (NumberFormatException e) {
+            return true;
+        }
+    }
+
+    static String playBoot(String howManyPencils) {
+        String takenPencils = "0";
+        if (((Integer.parseInt(howManyPencils) - 5) % 4) == 0) {
+            takenPencils = String.valueOf(new Random().nextInt(1, 4));
+        }
+        if (howManyPencils.equals("1")) {
+            takenPencils = String.valueOf(1);
+        }
+        if ((Integer.parseInt(howManyPencils) % 4) == 0) {
+            takenPencils = String.valueOf(3);
+        }
+        if (((Integer.parseInt(howManyPencils) + 1) % 4) == 0) {
+            takenPencils = String.valueOf(2);
+        }
+        if (((Integer.parseInt(howManyPencils) + 2) % 4) == 0) {
+            takenPencils = String.valueOf(1);
+        }
+        System.out.println(takenPencils);
+        return takenPencils;
+    }
+
 }
-
